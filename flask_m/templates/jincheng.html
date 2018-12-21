@@ -1,0 +1,22 @@
+<html>
+    <head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <body>
+  <table border="1" style="text-align:center">
+      <tr>
+            <th>进程名</th>
+            <th>状态</th>
+            <th>利用率</th>
+            <th>开启时间</th>
+          </tr>
+      {% for i in jc %}
+          <tr>
+            <td>{{ i['name'] }}</td>
+            <td>{{ i['zt'] }}</td>
+            <td>{{ i['cpu'] }}</td>
+            <td>{{ i['t'] }}</td>
+          </tr>
+      {% endfor %}
+</table>
+</body>
+</html>

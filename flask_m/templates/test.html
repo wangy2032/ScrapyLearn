@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: #ddd;
+			}
+			ul{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			.nav{
+				background: url("static/images/thumb.png");
+				width: 1340px;
+				height: 200px;
+				font-size: 20px;
+				line-height: 100px;
+				text-align: center;
+				border-bottom: 1px solid #f60;
+
+			}
+			.box{
+				margin: 0 auto;
+				width: 1000px;
+			}
+			.fl_l{
+				width: 200px;
+				float: left;
+				border: 1px solid #f4f4f4;
+				background: #fff;
+			}
+			.fl_l li a{
+				border-bottom: 1px solid #eee;
+				text-align: center;
+				display: block;
+				color: #333;
+				font-size: 14px;
+				line-height: 60px;
+			}
+			.fl_l li.active a{
+				background: #f60;
+				color: #fff;
+			}
+			.fl_r{
+				float: right;
+				width: 600px;
+			}
+			.fl_r li{
+				margin-bottom: 30px;
+				background: #fff;
+				font-size: 50px;
+				line-height: 300px;
+				display: block;
+				text-align: center;
+			}
+			.banner{
+				background: #fff;
+				width: 100%;
+				height: 100px;
+				font-size: 40px;
+				line-height: 600px;
+				text-align: center;
+				margin-bottom: 30px;
+			}
+		</style>
+		<script src = "{{url_for('static',filename = 'js/echarts.js')}}"></script>
+<script src = "{{url_for('static',filename = 'js/infographic.js')}}"></script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+
+		<style>
+			body{
+				background-color: #3A3A4F;
+			}
+
+		</style>
+	</head>
+	<body>
+		<!--辅助理解的线条<div style="position: fixed;top: 316px;height: 1px;background: #000;width: 100%;"></div>-->
+		<div class="nav"></div>
+		<div class="box">
+			<ul class="fl_l">
+				<li class="active"><a href="##">菜单1</a></li>
+				<li><a href="##">菜单2</a></li>
+				<li><a href="##">菜单3</a></li>
+				<li><a href="##">菜单4</a></li>
+				<li><a href="##">菜单5</a></li>
+
+			</ul>
+			<ul class="fl_r">
+				<li style="height: 400px;"><div id="business_load" style="width: 600px;height:400px;"></div></li>
+				<li style="height: 400px;"><iframe src="/zhexian" width="600px" height= "400px"></iframe></li>
+				<li style="height: 400px;"><div id="container1" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div></li>
+				<li style="height: 400px;"><div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div></li>
+				<li style="height: 400px;"><iframe src="/jincheng" width="600px" height= "400px"></iframe></li>
+				<table id="datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>总的</th>
+            <th>使用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>C:</th>
+            <td>{{ zong[0] }}</td>
+            <td>{{ shiyong[0] }}</td>
+        </tr>
+        <tr>
+            <th>D:</th>
+            <td>{{ zong[1] }}</td>
+            <td>{{ shiyong[1] }}</td>
+        </tr>
+        <tr>
+            <th>E:</th>
+            <td>{{ zong[2] }}</td>
+            <td>{{ shiyong[2] }}</td>
+        </tr>
+        <tr>
+            <th>F:</th>
+            <td>{{ zong[3] }}</td>
+            <td>{{ shiyong[3] }}</td>
+        </tr>
+    </tbody>
+</table>
+			</ul>
+			<div style="clear: both;"></div>
+		</div>
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				//设置标杆
+				var _line=parseInt($(window).height()/3);
+				$(window).scroll(function(){
+					//滚动730px，左侧导航固定定位
+					if ($(window).scrollTop()>730) {
+						$('.fl_l').css({'position':'fixed','top':100})
+					}else{
+						$('.fl_l').css({'position':'','top':''})
+					};
+					$('.fl_l li').eq(0).addClass('active');
+					//滚动到标杆位置,左侧导航加active
+					$('.fl_r li').each(function(){
+						var _target=parseInt($(this).offset().top-$(window).scrollTop()-_line);
+						var _i=$(this).index();
+						if (_target<=0) {
+							$('.fl_l li').removeClass('active');
+							$('.fl_l li').eq(_i).addClass('active');
+						}
+						//如果到达页面底部，给左侧导航最后一个加active
+						else if($(document).height()==$(window).scrollTop()+$(window).height()){
+							$('.fl_l li').removeClass('active');
+							$('.fl_l li').eq($('.fl_r li').length-1).addClass('active');
+						}
+					});
+				});
+				$('.fl_l li').click(function(){
+					$(this).addClass('active').siblings().removeClass('active');
+					var _i=$(this).index();
+					 $('body, html').animate({scrollTop:$('.fl_r li').eq(_i).offset().top-_line},400);
+				});
+			});
+		</script>
+
+
+	  <script type="text/javascript">
+	Highcharts.chart('business_load', {
+    chart: {
+        type: 'spline',
+        animation: Highcharts.svg, // don't animate in old IE
+        marginRight: 10,
+        events: {
+            load: function () {
+
+                // set up the updating of the chart each second
+                // 每秒设置图表的更新
+                var series = this.series[0];
+                setInterval(function () {
+                $.getJSON("/data", null, function(data){
+                    var x = (new Date()).getTime(), // 此刻时间
+                        y = data.cpu; // 前面代码返回的data数据
+                    series.addPoint([x, y], true, true);
+                    });
+                }, 1000);
+            }
+        }
+    },
+
+    time: {
+        useUTC: false
+    },
+
+    title: {
+        text: 'CPU利用率'
+    },
+    xAxis: {
+        type: 'datetime',
+        tickPixelInterval: 150
+    },
+    yAxis: {
+        title: {
+            text: 'cpu'
+        },
+        plotLines: [{
+            value:100,
+            width: 400,
+            color: '#ffffff'
+        }]
+    },
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+    },
+    legend: {
+        enabled: false
+    },
+    exporting: {
+        enabled: false
+    },
+    series: [{
+        name: 'Random data',
+        data: (function () {
+            // generate an array of random data
+            // 生成一组随机数据
+            var data = [],
+                time = (new Date()).getTime(),
+                i;
+            for (i =19;i>=10; i -= 1) {
+                data.push({
+                    x: time-i*1000,
+                    y: i,
+                });
+            }
+            return data;
+        }())
+    }]
+});
+</script>
+
+		<script>
+			Highcharts.chart('container1', {
+    chart: {
+        type: 'variablepie'
+    },
+    title: {
+        text: '内存饼图'
+    },
+    tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+
+            '内存: <b>{point.z}</b><br/>'
+    },
+    series: [{
+        minPointSize: 10,
+        innerSize: '20%',
+        zMin: 0,
+        name: 'countries',
+        data: [{
+            name: '使用',
+            y: 505370,
+            z: {{info['mem_used']}}
+        }, {
+            name: '空闲',
+            y: 551500,
+            z: {{info['mem_free']}}
+        }]
+    }]
+});
+		</script>
+
+	<script>
+        Highcharts.chart('container', {
+    data: {
+        table: 'datatable'
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '硬盘使用情况'
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'Units'
+        }
+    },
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.name + '</b><br/>' +
+                this.point.y + ' ' + this.point.name.toLowerCase();
+        }
+    }
+});
+    </script>
+
+	</body>
+</html>
